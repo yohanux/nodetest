@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
 import './App.css'
 import BtnCount from './component/btn_count.jsx'
 import Toast from './component/Toast.jsx'
