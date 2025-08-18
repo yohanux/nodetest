@@ -1,62 +1,139 @@
+/*
+  Todo 앱 전반 스타일
+  - 레이아웃, 입력 행, 목록, 푸터 섹션으로 구성
+  - 클래스를 통해 컴포넌트별 스타일을 분리
+*/
+/* Layout */
 #root {
-  max-width: 1280px;
+  max-width: 720px;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  padding: 2rem 1rem;
 }
 
 body {
-  background-color: #f5f5f5;
+  background-color: #f5f5f7;
 }
 
-@keyframes slideIn {
-  from {
-    transform: translateY(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.counter{
+.app {
   display: flex;
+  flex-direction: column;
   gap: 16px;
 }
 
-.counter__card {
+.title {
+  text-align: center;
+  margin: 0 0 8px 0;
+}
+
+/* Input Row */
+.inputRow {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   gap: 8px;
-  font-size: 24px;
-  background-color: white;
-  border-radius: 16px;
-  padding: 16px;
 }
 
-.counter__button {
-  display: flex;
-  align-items: center;
+.textInput {
+  flex: 1;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 14px;
 }
 
-.count__number{
-  font-size: 24px;
-  width: 80px;
+.textInput:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.addButton {
+  padding: 0 16px;
+  border: none;
+  border-radius: 8px;
+  background: #3b82f6;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.addButton:hover {
+  background: #2563eb;
+}
+
+/* List */
+.empty {
+  color: #6b7280;
   text-align: center;
 }
 
-.menu {
-  font-size: 24px;
-  width: 240px;
-  font-weight: 600;
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.total {
-  font-size: 24px;
+.listItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.itemLabel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.checkbox {
+  width: 18px;
+  height: 18px;
+}
+
+.completed {
+  text-decoration: line-through;
+  color: #9ca3af;
+}
+
+.deleteButton {
+  border: none;
+  background: #ef4444;
+  color: #fff;
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.deleteButton:hover {
+  background: #dc2626;
+}
+
+/* Footer */
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+  color: #374151;
+}
+
+.clear {
+  border: none;
+  background: #f97316;
+  color: #fff;
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.clear:hover {
+  background: #ea580c;
 }
