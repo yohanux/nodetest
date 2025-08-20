@@ -5,6 +5,7 @@
     - onAdd(text: string): 상위(App)에서 투두를 추가하는 콜백
 */
 import React, { useState } from 'react'
+import { PlusOutlined } from '@ant-design/icons'
 
 const TodoInput = ({ onAdd }) => {
   const [text, setText] = useState('')
@@ -28,7 +29,10 @@ const TodoInput = ({ onAdd }) => {
         value={text}
         onChange={(e) => setText(e.target.value)}
       />
-      <button className="addButton" type="submit">추가</button>
+      <button className="addButton" type="submit">
+        <PlusOutlined style={{ marginRight: 4 }} />
+        추가
+      </button>
     </form>
   )
 }
