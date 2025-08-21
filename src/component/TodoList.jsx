@@ -39,6 +39,11 @@ const TodoList = ({ todos, onToggle, onDelete, searchQuery = '' }) => {
             />
             <span className={todo.completed ? 'completed' : ''}>{todo.text}</span>
           </label>
+          {todo.createdAt && (
+            <small style={{ marginLeft: 8, color: '#999' }}>
+              {new Date(todo.createdAt).toLocaleString()}
+            </small>
+          )}
           <button className="deleteButton" onClick={() => onDelete(todo.id)}>
             <DeleteOutlined style={{ marginRight: 4 }} />
             삭제

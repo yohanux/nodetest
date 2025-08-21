@@ -10,14 +10,51 @@
   - 정리(cleanup): setInterval 클리어
   - 외부 시스템 동기화: localStorage, document.title
 */
-import { useEffect, useState } from 'react'
+import { useEffect, useReducer, useState } from 'react'
 import { CheckCircleOutlined, DeleteOutlined, PlusOutlined, ClearOutlined, EyeOutlined, EyeInvisibleOutlined, ClockCircleOutlined, TrophyOutlined, SearchOutlined } from '@ant-design/icons'
 import './App.css'
 import TodoInput from './component/TodoInput.jsx'
 import TodoList from './component/TodoList.jsx'
 
+// 투두 상태를 관리하는 리듀서
+function todosReducer(state, action) {
+  switch (action.type) {
+    case 'LOAD': {
+      return Array.isArray(action.payload) ? action.payload : []
+    }
+    case 'ADD': {
+      const text = action.text?.trim() ?? ''
+      if (!text) return state
+      return [
+        ...state,
+        {
+          id: Date.now(),
+          text,
+          completed: false,
+          createdAt: Date.now(),
+        },
+      ]
+    }
+    case 'TOGGLE': {
+      const id = action.id
+      return state.map((todo) => (
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+      ))
+    }
+    case 'DELETE': {
+      const id = action.id
+      return state.filter((todo) => todo.id !== id)
+    }
+    case 'CLEAR_COMPLETED': {
+      return state.filter((todo) => !todo.completed)
+    }
+    default:
+      return state
+  }
+}
+
 function App() {
-  const [todos, setTodos] = useState([])
+  const [todos, dispatch] = useReducer(todosReducer, [])
   const [showLifecycleDemo, setShowLifecycleDemo] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
 
@@ -27,37 +64,28 @@ function App() {
   const addTodo = (text) => {
     const trimmed = text.trim()
     if (!trimmed) return
-    setTodos((prev) => [
-      ...prev,
-      {
-        id: Date.now(),
-        text: trimmed,
-        completed: false,
-      },
-    ])
+    dispatch({ type: 'ADD', text: trimmed })
   }
 
   /**
    * id에 해당하는 투두의 완료 상태를 토글합니다.
    */
   const toggleTodo = (id) => {
-    setTodos((prev) => prev.map((todo) => (
-      todo.id === id ? { ...todo, completed: !todo.completed } : todo
-    )))
+    dispatch({ type: 'TOGGLE', id })
   }
 
   /**
    * id에 해당하는 투두를 삭제합니다.
    */
   const deleteTodo = (id) => {
-    setTodos((prev) => prev.filter((todo) => todo.id !== id))
+    dispatch({ type: 'DELETE', id })
   }
 
   /**
    * 완료된 투두 항목들을 한 번에 제거합니다.
    */
   const clearCompleted = () => {
-    setTodos((prev) => prev.filter((todo) => !todo.completed))
+    dispatch({ type: 'CLEAR_COMPLETED' })
   }
 
   // 파생 상태: 완료된 개수
@@ -81,7 +109,15 @@ function App() {
     const saved = localStorage.getItem('todos')
     if (saved) {
       try {
-        setTodos(JSON.parse(saved))
+        const parsed = JSON.parse(saved)
+        const migrated = Array.isArray(parsed)
+          ? parsed.map((todo) => ({
+              ...todo,
+              createdAt:
+                todo.createdAt ?? (typeof todo.id === 'number' ? todo.id : Date.now()),
+            }))
+          : []
+        dispatch({ type: 'LOAD', payload: migrated })
         console.log('[App] loaded todos from localStorage')
       } catch (e) {
         console.warn('[App] failed to parse todos from localStorage')
